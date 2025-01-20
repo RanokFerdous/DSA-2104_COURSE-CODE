@@ -1,0 +1,48 @@
+#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+// Function to check if two characters are matching pairs
+bool isMatchingPair(char open, char close) {
+    return (open == '(' && close == ')') ||
+           (open == '{' && close == '}') ||
+           (open == '[' && close == ']');
+}
+
+// Function to check if the given expression has balanced parentheses
+bool isBalanced(const string& expression) {
+    stack<char> s;
+
+    for (char ch : expression) {
+        // If opening parenthesis, push it onto the stack
+        if (ch == '(' || ch == '{' || ch == '[') {
+            s.push(ch);
+        }
+        // If closing parenthesis, check for a matching pair
+        else if (ch == ')' || ch == '}' || ch == ']') {
+            if (s.empty() || !isMatchingPair(s.top(), ch)) {
+                return false; // Unmatched closing parenthesis
+            }
+            s.pop(); // Pop the matching opening parenthesis
+        }
+    }
+
+    // If stack is empty, all parentheses are balanced
+    return s.empty();
+}
+
+int main() {
+    string expression;
+
+    cout << "Enter an expression: ";
+    cin >> expression;
+
+    if (isBalanced(expression)) {
+        cout << "The expression has balanced parentheses." << endl;
+    } else {
+        cout << "The expression does not have balanced parentheses." << endl;
+    }
+
+    return 0;
+}
