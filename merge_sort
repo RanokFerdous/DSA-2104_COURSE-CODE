@@ -1,0 +1,80 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void conquer( int arr[], int s, int mid, int e)
+{
+    int mergedSize= e-s+1; // size =no_of_index +1
+
+    int *merged =new int [mergedSize];  // vip line.
+
+
+
+    int idx1=s,x=0; // s is the 0 th idex of first half sorted array
+
+    int idx2 = mid+1; // idx2 is the first index of the 2nd half sorted array .
+
+
+    while( idx1<=mid && idx2<=e)
+    {
+        if( arr[idx1]<=arr[idx2]){
+
+            merged[x++]= arr[idx1++];
+        }
+        else {
+            merged[x++]= arr[idx2++];
+        }
+    }
+
+    while( idx1<=mid)
+    {
+        merged[x++]= arr[idx1++];
+    }
+
+    while( idx2<=e)
+    {
+        merged [x++]= arr[idx2++];
+    }
+
+    for(int i=0,j=s;i<mergedSize; i++,j++)
+    {
+        arr[j]=merged[i];
+    }
+
+    delete [] merged; // delete merged array .
+
+
+    }
+
+void divide ( int arr[], int s, int e)
+{
+    if( s>=e){return ;}
+    int mid = s+ (e-s)/2;
+
+    divide( arr, s, mid); // recursively sort the first half
+    divide( arr, mid+1, e);// recursively sort the second half
+
+    conquer( arr, s, mid, e);// merged the sorted 2 halves.
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+
+    int arr[n];
+
+    for( int i=0;i<n;i++)
+    {
+        cin>>arr[i];
+    }
+
+    divide( arr, 0, n-1);  // start index=0, end index=n-1.
+
+    for( int i=0;i<n;i++)
+    {
+        cout<<arr[i]<<" ";
+    }
+    cout<<endl;
+
+
+}
