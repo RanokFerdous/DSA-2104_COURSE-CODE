@@ -1,0 +1,222 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node* next;
+
+    Node(int val) {
+        data = val;
+        next = NULL;
+    }
+};
+
+class List {
+    Node* head;
+    Node* tail;
+
+public:
+    List() {
+        head = tail = NULL;
+    }
+
+    // Insert at the front
+    void pushFront(int val) {
+        Node* newNode = new Node(val);
+        if (head == NULL) {
+            head = tail = newNode;
+        } else {
+            newNode->next = head;
+            head = newNode;
+        }
+    }
+
+    // Insert at the back
+    void pushback(int val) {
+        Node* newNode = new Node(val);
+        if (head == NULL) {
+            head = tail = newNode;
+        } else {
+            tail->next = newNode;
+            tail = newNode;
+        }
+    }
+
+    // Insert at a specific position
+    void insertAtPosition(int val, int pos) {
+        Node* newNode = new Node(val);
+
+        // Case: Insert at the head
+        if (pos == 1) {
+            newNode->next = head;
+            head = newNode;
+            if (tail == NULL) tail = newNode; // If list was empty, update tail
+            return;
+        }
+
+        Node* temp = head;
+        for (int i = 1; i < pos - 1; i++) {
+            if (temp == NULL) { // ✅ Corrected (== instead of =)
+                cout << "Position is invalid!" << endl;
+                delete newNode; // Avoid memory leak
+                return;
+            }
+            temp = temp->next;
+        }
+
+        // If position is beyond the last node
+        if (temp == NULL) {
+            cout << "Position is invalid!" << endl;
+            delete newNode;
+            return;
+        }
+
+        newNode->next = temp->next;
+        temp->next = newNode;
+
+        // If inserted at the last position, update tail
+        if (newNode->next == NULL) {
+            tail = newNode;
+        }
+    }
+
+
+
+      void popFront()
+      {
+
+          if( head==NULL)
+          {
+              cout<<"link list is empty"<<endl;
+          }
+
+         Node* temp=head;
+
+          head=head->next;
+
+          temp->next=NULL; // not necessary.
+
+          delete temp;
+      }
+
+    // Print the list
+    void print() {
+        Node* temp = head;
+        while (temp != NULL) {
+            cout << temp->data << "->";
+            temp = temp->next;
+        }
+        cout << "NULL" << endl;
+    }
+
+
+    void popBack()
+    {
+        Node* temp=head;
+
+        while( temp->next->next!=NULL)
+            {
+                temp=temp->next;
+            }
+            temp->next=NULL;
+
+            delete tail;
+
+            tail =temp;
+    }
+
+
+     void deleteAtPosition(int pos) {
+        if (head == NULL) {
+            cout << "List is empty." << endl;
+            return;
+        }
+
+        if (pos <= 0) {
+            cout << "Position should be a positive integer." << endl;
+            return;
+        }
+
+        if (pos == 1) { // Delete the first node
+            popFront();
+            return;
+        }
+
+        Node* temp = head;
+        for (int i = 1; i < pos - 1; i++) {
+            if (temp == NULL || temp->next == NULL) {
+                cout << "Position is invalid!" << endl;
+                return;
+            }
+            temp = temp->next;
+        }
+
+        if (temp->next == NULL) {
+            cout << "Position is invalid!" << endl;
+            return;
+        }
+
+        Node* nodeToDelete = temp->next;
+        temp->next = nodeToDelete->next;
+        delete nodeToDelete;
+
+        // If the deleted node was the last node, update tail
+        if (temp->next == NULL) {
+            tail = temp;
+        }
+    }
+
+
+    //search
+
+    int Search(int key)
+    {
+        Node* temp=head;
+        int idx=0;
+
+        while( temp!=NULL){
+        if( temp->data==key)
+        {
+            return idx;
+        }
+
+        temp=temp->next;
+        idx++;
+        }
+        return -1;
+    }
+
+};
+
+int main() {
+    List ll;
+    ll.pushFront(10);
+    ll.pushFront(30);
+    ll.print();
+
+    ll.pushback(20);
+    ll.print();
+
+    ll.insertAtPosition(432, 2);
+    ll.print();
+
+    ll.insertAtPosition(500, 1); // Insert at head
+    ll.print();
+
+    ll.insertAtPosition(999, 10); // Invalid position test
+
+    ll.popFront();
+    ll.print();
+
+    ll.popBack();
+
+    ll.print();
+
+    ll.deleteAtPosition(2);
+    ll.print();
+
+   cout<< "search value index is :"<<ll.Search(10)<<endl;
+
+    return 0;
+}
